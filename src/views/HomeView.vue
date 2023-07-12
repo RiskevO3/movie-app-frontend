@@ -1,9 +1,14 @@
 <template>
-  <div class="flex flex-col items-center justify-center p-10">
-    <h1 class="text-3xl font-bold mb-5">Welcome To Movie Wishlist App!</h1>
-    <p class="text-lg font-semibold mb-10">
-      Disini,Kamu bisa memilih wishlist movie yang ingin kamu tonton yang sedang tayang di bioskop.
-    </p>
-    <button class="btn btn-info hover:scale-90 hover:btn-success">Get Started</button>
+<div class="hero min-h-screen bg-base-200">
+  <div class="hero-content text-center">
+    <div class="max-w-md">
+      <h1 class="text-5xl font-bold">Selamat Datang di MovieApp!</h1>
+      <p class="py-6">Disini, Kamu dapat menambahkan wishlist dengan berbagai macam film yang sedang tayang, ataupun yang akan datang.</p>
+      <RouterLink class="btn btn-success hover:scale-90 hover:btn-info w-full" to="/nowshowing">Mulai</RouterLink>
+    </div>
   </div>
+</div>
 </template>
+<script setup>
+import {RouterLink} from 'vue-router';
+</script>
