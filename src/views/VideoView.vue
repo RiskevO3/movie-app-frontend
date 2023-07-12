@@ -15,7 +15,7 @@ export default{
   data(){
     return{
       loading:false,
-      videoUrl:`${useAuthStore().ngrokUrl}/movie-trailer/${this.$route.params.id}`,
+      videoUrl:'',
       id:this.$route.params.id
     }
   },
@@ -29,6 +29,7 @@ export default{
     let response = await useAuthStore().checkVideo(this.id)
     if (response){
       this.loading = false
+      this.videoUrl = `${useAuthStore().ngrokUrl}/movie-trailer/${this.$route.params.id}`
     }
     else{
       this.loading = false
