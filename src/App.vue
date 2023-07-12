@@ -1,5 +1,5 @@
 <script setup>
-import navBarView from './navbar/navBarView.vue'
+import navBarView from './navbar/NavBarView.vue'
 </script>
 
 <template>
