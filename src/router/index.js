@@ -2,8 +2,8 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import NowShowingView from '../views/NowShowingView.vue'
 import ComingSoonView from '../views/ComingSoonView.vue'
-import DetailMovieView from '../views/detailMovieView.vue'
-import videoView from '../views/videoView.vue'
+import DetailMovieView from '../views/DetailMovieView.vue'
+import VideoView from '../views/VideoView.vue'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -30,7 +30,7 @@ const router = createRouter({
     {
       path:'/trailer/:id',
       name:'trailer',
-      component: videoView
+      component: VideoView
     }
   ]
 })
