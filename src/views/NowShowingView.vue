@@ -4,7 +4,7 @@
     <div class="grid md:grid-cols-5 sm:grid-cols-1 gap-4" v-else>
       <div class="card w-auto bg-neutral shadow-xl" v-for="movie in movie_list" :key="movie.id">
         <figure>
-          <img :src="movie.image" :alt="movie.title" class="mx-auto rounded overflow-hidden"/>
+          <img :src="movie.image" :alt="movie.title" class="mx-auto rounded px-0 w-full"/>
         </figure>
         <div class="card-body">
           <h2 class="md:tracking-tighter sm:tracking-tighter text-center content-center card-title text-md font-bold">{{ movie.title }}</h2>
