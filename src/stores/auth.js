@@ -44,7 +44,7 @@ export const useAuthStore = defineStore('auth', () => {
   const checkVideo = async (id) =>{
     try {
       let response = await axios.get(`${ngrokUrl}/checkvideo/${id}`)
-      if (response.status == 200){
+      if (response.data.success){
         return true
       }
       return false
