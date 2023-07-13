@@ -27,16 +27,21 @@ export default{
   async mounted(){
     this.loading = true
     let response = await useAuthStore().checkVideo(this.id)
-    if (response){
+    if (response.success){
       this.loading = false
       this.videoUrl = `${useAuthStore().ngrokUrl}/movie-trailer/${this.$route.params.id}`
     }
     else{
       this.loading = false
-      this.$router.push('/')
-      ElNotification.warning({
-        title: 'Error',
-        message: 'Page doesnt work',
+        if(response.message == 'Please Login First'){
+          this.$router.push('/login')
+        }
+        else{
+          this.$router.push('/')
+        }
+        ElNotification.info({
+        title: 'info',
+        message: response.message,
         timeout:false
       })
     }

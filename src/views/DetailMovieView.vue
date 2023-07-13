@@ -1,6 +1,6 @@
 <template>
   <div class="mt-10 grid place-items-center font-mono">
-      <span class="loading loading-dots loading-lg" v-if="isLoading"></span>
+    <span class="loading loading-dots loading-lg" v-if="isLoading"></span>
     <div class="bg-neutral rounded-md bg-gray-800 shadow-lg" v-else>
       <div class="md:flex px-4 leading-none max-w-4xl">
         <div class="flex-none">
@@ -24,7 +24,7 @@
         </div>
       </div>
       <div class="justify-end items-center w-full px-5 py-2">
-          <button type="button" class="btn btn-outline btn-warning hover:scale-90 px-4 py-2 m-2 w-full">
+          <button type="button" class="btn btn-outline btn-warning hover:scale-90 px-4 py-2 m-2 w-full" v-if="!isWishlist" @click="insertWishList(data.id)">
             Add To Wishlist
           </button>
           <RouterLink
@@ -75,13 +75,14 @@
 <script>
 import {useAuthStore} from '../stores/auth';
 import {RouterLink} from 'vue-router';
-import {ElNotification} from 'element-plus';
+import {ElNotification,ElLoading} from 'element-plus';
 export default{
   name:'DetailMovieView',
   data(){
     return{
       data:{},
-      loading:false
+      loading:false,
+      wishList:false,
     }
   },
   components:[
@@ -90,24 +91,61 @@ export default{
   computed:{
     isLoading(){
       return this.loading
+    },
+    isWishlist(){
+      return this.wishList
     }
   },
   async mounted (){
     let id = this.$route.params.id
     this.loading = true
     let res = await useAuthStore().getMovieDetail(id)
-    if (res){
-      this.data = res
+    if (res.success){
+      this.data = res.data
+      this.wishList = res.data.saved
       this.loading = false
     }
     else{
-      this.loading = false
-      this.$router.push('/')
-      ElNotification.warning({
-        title: 'Error',
-        message: 'Page doesnt work',
+        this.loading = false
+        if(res.message == 'Please Login First'){
+          this.$router.push('/login')
+        }
+        else{
+          this.$router.push('/')
+        }
+        ElNotification.info({
+        title: 'info',
+        message: res.message,
         timeout:false
       })
+    }
+  },
+  methods:{
+    async insertWishList(id){
+        this.loadingScreen = ElLoading.service({
+            fullscreen: true,
+            text: 'Loading',
+            lock: true,
+            background: 'rgba(0, 0, 0, 0.7)'
+        })
+        let res = await useAuthStore().insertWishList(id)
+        if (res.success){
+          ElNotification.success({
+            title: 'Success',
+            message: res.message,
+            timeout:false
+          })
+          this.wishList = true
+          this.loadingScreen.close()
+        }
+        else{
+          ElNotification.error({
+            title: 'Error',
+            message: res.message,
+            timeout:false
+          })
+          this.loadingScreen.close()
+        }
     }
   }
 }

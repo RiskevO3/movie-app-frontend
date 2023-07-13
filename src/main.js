@@ -15,5 +15,4 @@ const app = createApp(App)
 app.use(createPinia())
 .use(router)
 .use(ElementPlus)
-
 app.mount('#app')
