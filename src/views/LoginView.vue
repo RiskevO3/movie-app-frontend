@@ -23,8 +23,7 @@
                 type="username"
                 name="username"
                 id="username"
-                class="
-                bg-gray-700 border border-gray-600 text-white placeholder-gray-400 sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 :disabled:bg-gray-700 :disabled:text-gray-400 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:disabled:bg-gray-700 dark:disabled:text-gray-400"
+                class="bg-gray-700 border border-gray-600 text-white placeholder-gray-400 sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 :disabled:bg-gray-700 :disabled:text-gray-400 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:disabled:bg-gray-700 dark:disabled:text-gray-400"
                 placeholder="username"
                 v-model="username"
               />
@@ -58,7 +57,8 @@
             </button>
             <p class="text-sm font-light text-gray-400 dark:text-gray-400">
               Don’t have an account yet?
-              <RouterLink to="/register" class="font-medium text-primary-500 hover:underline dark:text-primary-500"
+              <RouterLink to="/register"
+              class="font-medium text-primary-500 hover:underline dark:text-primary-500"
                 >Sign up
               </RouterLink
               >
