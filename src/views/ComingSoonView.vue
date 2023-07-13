@@ -72,7 +72,7 @@
         if (res.success){
           ElNotification.success({
             title: 'Success',
-            message: res.message,
+            message: 'Movie berhasil ditambahkan ke wishlist',
             timeout:false
           })
           this.movie_list = this.movie_list.filter((movie) => movie.id !== id)

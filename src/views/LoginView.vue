@@ -103,6 +103,8 @@ export default {
       }
       let res = await useAuthStore().loginRequest(this.username, this.password)
       if (res) {
+        this.username = ''
+        this.password = ''
         this.$router.push('/')
         ElNotification.success({
           title: 'Success',

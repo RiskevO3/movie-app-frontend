@@ -132,7 +132,7 @@ export default{
         if (res.success){
           ElNotification.success({
             title: 'Success',
-            message: res.message,
+            message: 'Berhasil menambahkan ke wishlist',
             timeout:false
           })
           this.wishList = true

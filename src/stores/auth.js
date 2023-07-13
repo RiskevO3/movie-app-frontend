@@ -19,12 +19,32 @@ export const useAuthStore = defineStore('auth', {
             localStorage.removeItem('username')
             localStorage.removeItem('authToken')
             this.authToken = null
+            this.username = null
           }
         } catch (error) {
           localStorage.removeItem('username')
           localStorage.removeItem('authToken')
           this.authToken = null
+          this.username = null
         }
+      }
+    },
+    async registerRequest(username, password) {
+      try {
+        let response = await axios.post(`${this.ngrokUrl}/register`, {
+          username: username,
+          password: password
+        })
+        if (response.data.success) {
+          this.authToken = response.data.data.authToken
+          this.username = response.data.data.username
+          localStorage.setItem('authToken', this.authToken)
+          localStorage.setItem('username', this.username)
+          return {message: 'Success', success: true}
+        } 
+        return {message: response.data.data.message, success: false}
+      } catch (error) {
+        return {message: 'Something went wrong', success: false}
       }
     },
     async loginRequest(username,password) {
