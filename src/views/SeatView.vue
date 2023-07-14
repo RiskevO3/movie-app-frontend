@@ -11,8 +11,8 @@
   </div>
     <div class="grid md:grid-cols-12 sm:grid-cols-6 grid-cols-3 gap-3">
       <div 
-      class="card w-auto bg-neutral" 
-      :class="{'hover:scale-90 bg-neutral':!movie.is_sold,'bg-error':movie.is_sold,'bg-amber-950':movie.is_book}" v-for="movie,index in seatList" :key="movie.seat_number"
+      class="card w-auto" 
+      :class="{'hover:scale-90 bg-neutral':!movie.is_sold && !movie.is_book,'bg-error':movie.is_sold,'hover:scale-90 bg-amber-950':movie.is_book}" v-for="movie,index in seatList" :key="movie.seat_number"
       @click="movie.is_book && !movie.is_sold ? unselectSeat(index) : selectSeat(index)"
       :disabled="movie.is_sold"
       >
