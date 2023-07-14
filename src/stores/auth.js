@@ -195,6 +195,41 @@ export const useAuthStore = defineStore('auth', {
         return { message: 'Something went wrong', success: false }
       }
     },
+    async getBookMovie(){
+      try {
+        if (!this.authToken) {
+          return { message: 'Please Login First', success: false }
+        }
+        let response = await axios.get(`${this.ngrokUrl}/bookedticket`, {
+          headers: {
+            Authorization: `Bearer ${this.authToken}`
+          }
+        })
+        if (response.data.success) {
+          return { data: response.data.data, success: true }
+        } else if (response.data.message == 'Unauthorized') {
+          return { message: 'Please Login First', success: false }
+        }
+        return { message: 'Something went wrong', success: false }
+      } catch (error) {
+        return { message: 'Something went wrong', success: false }
+      }
+    },
+    async reffundTicket(ticketId){
+      try {
+        let response = await axios.post(`${this.ngrokUrl}/reffundticket`,{
+          ticket_id:ticketId
+        },{headers:{
+          Authorization:`Bearer ${this.authToken}`
+        }})
+        if (response.data.success){
+          return {message:'Tiket berhasil di refund!',success:true}
+        }
+        return {message:response.data.message?response.data.message:'something went wrong',success:false}
+      } catch (error) {
+          return { message: 'Something went wrong', success: false }
+      }
+    },
     async checkVideo(id) {
       try {
         if (!this.authToken) {
@@ -281,13 +316,31 @@ export const useAuthStore = defineStore('auth', {
         }})
         if(response.data.success){
           this.balance = response.data.balance
-          console.log(this.balance)
           localStorage.setItem('balance', this.balance)
           return {message:'Success',success:true}
         }
         return {message:response.data.message?response.data.message:'something went wrong',success:false}
       } catch (error) {
-        console.log('here',error)
+        return {message:'Something went wrong',success:false}
+      }
+    },
+    async submitSeat(movieId,seatList){
+      try {
+        let response = await axios.post(`${this.ngrokUrl}/bookticket`,{
+          list_seat:seatList,
+          movie_id:movieId
+        },{headers:{
+          Authorization:`Bearer ${this.authToken}`
+        }})
+        if (response.data.success){
+          this.balance = response.data.balance
+          return {message:'Tiket berhasil dibeli!',success:true}
+        }
+        return {
+          message: response.data.message ? response.data.message : 'Something went wrong',
+          success: false
+        }
+      } catch (error) {
         return {message:'Something went wrong',success:false}
       }
     }

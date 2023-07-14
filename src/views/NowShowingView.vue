@@ -8,7 +8,7 @@
           <img :src="movie.image" :alt="movie.title" class="mx-auto rounded px-0 w-full"/>
         </figure>
         <div class="card-body">
-          <h2 class="md:tracking-tighter sm:tracking-tighter text-center content-center card-title text-md font-bold">{{ movie.title }}</h2>
+          <h2 class="md:tracking-tighter sm:tracking-tighter text-center content-center text-md font-bold">{{ movie.title }}</h2>
           <div class="justify-end card-actions mt-auto">
             <button class="btn btn-warning hover:scale-90 hover:btn-success w-full" @click="insertWishList(movie.id)">Add To Wishlist</button>
             <RouterLink class="btn btn-info hover:scale-90 hover:btn-success w-full" :to="`/moviedetail/${movie.id}`">View Detail</RouterLink>

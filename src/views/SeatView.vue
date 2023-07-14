@@ -12,8 +12,8 @@
     <div class="grid md:grid-cols-12 sm:grid-cols-6 grid-cols-3 gap-3">
       <div 
       class="card w-auto bg-neutral" 
-      :class="{'hover:scale-90 bg-neutral':!movie.is_sold,'bg-[#9B1C1C]':movie.is_sold || movie.is_book}" v-for="movie,index in seatList" :key="movie.seat_number"
-      @click="movie.is_book ? unselectSeat(index) : selectSeat(index)"
+      :class="{'hover:scale-90 bg-neutral':!movie.is_sold,'bg-error':movie.is_sold,'bg-amber-950':movie.is_book}" v-for="movie,index in seatList" :key="movie.seat_number"
+      @click="movie.is_book && !movie.is_sold ? unselectSeat(index) : selectSeat(index)"
       :disabled="movie.is_sold"
       >
         <div class="card-body">
@@ -22,17 +22,18 @@
       </div>
     </div>
     <p class="text-2xl font-semibold text-start">Total Harga: Rp. {{ totalPrice.toLocaleString('id-ID') }} </p>
-    <button class="btn btn-success w-1/2 mt-3 hover:scale-90">Pesan</button>  
+    <button class="btn btn-success w-1/2 mt-3 hover:scale-90" @click="confirmSeat">Pesan</button>  
     </template>
   </div>
 </template>
 <script>
-import { ElNotification } from 'element-plus';
+import { ElNotification,ElMessageBox } from 'element-plus';
 import { useAuthStore } from '../stores/auth';
 export default{
   name:'SeatView',
   data(){
     return{
+      movie_id:this.$route.params.id,
       seatList : [],
       loading:false,
       ticketPrice:0,
@@ -65,10 +66,10 @@ export default{
       this.loading = false
     }else{
       this.loading = false
-      this.$route.push('/home')
+      this.$router.push('/')
       ElNotification.info({
         title: 'info',
-        message: 'there was an error',
+        message: response.message ? response.message : 'there was an error',
       })
     }
   },
@@ -85,14 +86,59 @@ export default{
         this.total_price += this.ticketPrice
         this.seatList[index].is_book = true
         this.selectedSeat.push(this.seatList[index].seat_number)
-        console.log(this.selectedSeat)
       }
     },
     unselectSeat(index){
       this.total_price -= this.ticketPrice
       this.seatList[index].is_book = false
       this.selectedSeat.splice(this.selectedSeat.indexOf(this.seatList[index].seat_number),1)
-      console.log(this.selectedSeat)
+    },
+    async submitSeat(){
+      if(this.selectedSeat.length < 1){
+        ElNotification.error({
+          title:'error',
+          message:'you must select at least 1 seat'
+        })
+        return
+      }
+      this.loading = true
+      await useAuthStore().submitSeat(this.movie_id,this.selectedSeat).then(response=>{
+        if(response.success){
+          this.loading = false
+          this.$router.push('/')
+          ElNotification.success({
+            title:'success',
+            message:response.message
+          })
+        }else{
+          this.loading = false
+          ElNotification.error({
+            title:'error',
+            message:response.message
+          })
+        }
+      })
+    },
+    confirmSeat(){
+      if(useAuthStore().balance < this.totalPrice){
+        ElNotification.error({
+          title:'error',
+          message:'your balance is not enough'
+        })
+        return
+      }
+      ElMessageBox.confirm('Apakah anda yakin untuk melakukan checkout?','Checkout Confirmation',{
+        confirmButtonText:'Yes',
+        cancelButtonText:'No',
+        type:'warning'
+      }).then(()=>{
+        this.submitSeat()
+      }).catch(()=>{
+        ElNotification.info({
+          title:'info',
+          message:'you canceled the submission'
+        })
+      })
     }
   }
 }

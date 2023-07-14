@@ -8,101 +8,96 @@
     </div>
   </div>
   <div class="flex flex-col items-center justify-center p-10">
-    <div class="grid md:grid-cols-5 sm:grid-cols-1 gap-4">
-        <div class="card w-auto bg-neutral shadow-xl" v-for="index in 5" :key="index">
+    <span class="loading loading-dots loading-lg" v-if="isLoading"></span>
+    <div class="grid md:grid-cols-5 sm:grid-cols-1 gap-4" v-else>
+        <div class="card w-auto bg-neutral shadow-xl" v-for="movie,index in movie_list" :key="index">
           <figure>
-            <img src="http://localhost:5001/movie-images/23BARE.jpg" alt="barbie" class="mx-auto rounded px-0 w-full"/>
+            <img :src="movie.image" :alt="movie.title" class="mx-auto rounded px-0 w-full"/>
           </figure>
           <div class="card-body">
-            <h2 class="text-center content-center card-title text-md">Barbie</h2>
-            <p class="font-semibold mt-0">Total Price: </p>
-            <p class="font-semibold">Seat Number: </p>
+            <h2 class="text-center content-center text-md font-semibold">{{ movie.title }}</h2>
+            <p class="font-semibold text-center">Price: Rp.{{ movie.price ? movie.price.toLocaleString('id-ID') : 0 }}</p>
+            <p class="font-semibold text-center">Seat Number: {{ movie.seat_number }}</p>
             <div class="justify-end card-actions mt-auto">
-              <button class="btn btn-error hover:scale-90 hover:btn-success w-full">Reffund</button>
+              <button class="btn btn-error hover:scale-90 hover:btn-success w-full" @click="confirmReffund(movie.ticket_id)">Reffund</button>
             </div>
           </div>
         </div>
       </div>
   </div>
 </template>
-<!-- <script>
-import { RouterLink } from 'vue-router'
-import { useAuthStore } from '../stores/auth'
-import { ElNotification, ElMessageBox, ElLoading } from 'element-plus'
-export default {
-  name: 'TicketBookView',
-  components: [RouterLink],
-  data() {
-    return {
-      movie_list: [],
-      loading: false,
-      loadingScreen: false
+<script>
+import {useAuthStore} from '../stores/auth';
+import { ElNotification,ElMessageBox } from 'element-plus';
+export default{
+  name:'TicketBookView',
+  data(){
+    return{
+      movie_list : [],
+      loading:false
     }
   },
-  computed: {
-    isLoading() {
+  computed:{
+    isLoading(){
       return this.loading
     }
   },
-  async mounted() {
+  async mounted (){
     this.loading = true
-    let res = await useAuthStore().getWishlist()
-    if (res.success) {
+    let res = await useAuthStore().getBookMovie()
+    if (res.success){
       this.movie_list = res.data
       this.loading = false
-    } else {
+    }
+    else{
       this.loading = false
-      if (res.message == 'Please Login First') {
-        this.$router.push('/login')
-      } else {
+      if(res.message == 'Please Login First'){
+        this.$router.replace('/login')
+      }else{
         this.$router.push('/')
       }
       ElNotification.info({
         title: 'info',
         message: res.message,
-        timeout: false
+        timeout:false
       })
     }
   },
-  methods: {
-    removeMovie(id) {
-      ElMessageBox.confirm('Movie will be deleted from your wishlist,continue?', 'Warning', {
-        confirmButtonText: 'Continue',
-        cancelButtonText: 'Cancel',
-        type: 'warning'
+  methods:{
+    confirmReffund(ticket_id){
+    ElMessageBox.confirm('Apakah anda yakin ingin mereffund ticket ini?', 'Reffund Confirmation', {
+    confirmButtonText: 'Submit',
+    cancelButtonText: 'Cancel',
+    type: 'warning'
+    }).then(() => {
+      this.reffund(ticket_id)
+    }).catch(() => {
+      ElNotification.info({
+        title: 'info',
+        message: 'Reffund Canceled',
+        timeout:false
       })
-        .then(async () => {
-          this.loadingScreen = ElLoading.service({
-            fullscreen: true,
-            text: 'Loading',
-            lock: true,
-            background: 'rgba(0, 0, 0, 0.7)'
-          })
-          let res = await useAuthStore().deleteWishList(id)
-          if (res.success) {
-            this.movie_list = this.movie_list.filter((movie) => movie.id !== id)
-            ElNotification.success({
-              title: 'success',
-              message: 'Delete completed'
-            })
-            this.loadingScreen.close()
-          } else {
-            ElNotification.info({
-              title: 'info',
-              message: res.message,
-              timeout: false
-            })
-            this.loadingScreen.close()
+    })
+    },
+    async reffund(id){
+      let res = await useAuthStore().reffundTicket(id)
+      if(res.success){
+        ElNotification.success({
+          title: 'Success',
+          message: res.message,
+        })
+        this.movie_list.filter((item,index)=>{
+          if(item.ticket_id == id){
+            this.movie_list.splice(index,1)
           }
         })
-        .catch(() => {
-          ElNotification.info({
-            title: 'info',
-            message: 'Delete canceled'
-          })
-          this.loadingScreen.close()
+      }else{
+        ElNotification.error({
+          title: 'Error',
+          message: res.message,
         })
+      }
     }
   }
 }
-</script> -->
+</script>
