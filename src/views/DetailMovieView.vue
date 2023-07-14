@@ -20,7 +20,7 @@
           </p>
           <p class="flex text-md px-4 my-2">
             <span class="font-semibold sm:block sm:text-center md:text-left">Price:</span>
-            <span class="sm:block sm:text-center md:text-left font-semibold"> Rp.{{ data.price}}</span>           
+            <span class="sm:block sm:text-center md:text-left font-semibold"> Rp.{{ data.price > 0 ? data.price : 'Tiket belum dijual.'}}</span>           
           </p>
           <p class="flex text-md px-4 my-2">
             <span class="font-semibold sm:block sm:text-center md:text-left">Director:</span>
@@ -36,6 +36,7 @@
             :to="`/seatview/${data.id}`"
             type="button"
             class="btn btn-outline btn-success hover:scale-90 px-4 py-2 m-2 w-full"
+            v-if="data.price > 0"
             >Book A Seat
           </RouterLink>
           <button type="button" class="btn btn-outline btn-warning hover:scale-90 px-4 py-2 m-2 w-full" v-if="!isWishlist" @click="insertWishList(data.id)">
@@ -116,7 +117,7 @@ export default{
     let res = await useAuthStore().getMovieDetail(id)
     if (res.success){
       this.data = res.data
-      this.data.price = this.data.price.toLocaleString('id-ID')
+      this.data.price = this.data.price ? this.data.price.toLocaleString('id-ID') : 0
       this.wishList = res.data.saved
       this.loading = false
     }
