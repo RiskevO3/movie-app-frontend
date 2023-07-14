@@ -122,7 +122,7 @@ let getBalance = computed(() => {
 const route = useRouter()
 const logout = async () => {
   let response = await useAuthStore().logoutRequest()
-  if (response.success) {
+  if (response) {
     ElNotification.success({
       title: 'Success',
       message: 'Logout Success'

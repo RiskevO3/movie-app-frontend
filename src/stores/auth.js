@@ -82,6 +82,7 @@ export const useAuthStore = defineStore('auth', {
           }
         })
         if(response.data.success){
+          console.log('succ')
           localStorage.removeItem('username')
           localStorage.removeItem('authToken')
           localStorage.removeItem('balance')
