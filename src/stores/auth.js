@@ -50,7 +50,7 @@ export const useAuthStore = defineStore('auth', {
           localStorage.setItem('balance', this.balance)
           return {message: 'Success', success: true}
         } 
-        return {message: response.message, success: false}
+        return {message: response.data.message, success: false}
       } catch (error) {
         return {message: 'Something went wrong', success: false}
       }
