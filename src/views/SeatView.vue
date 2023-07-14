@@ -66,7 +66,7 @@ export default{
       this.loading = false
     }else{
       this.loading = false
-      this.$router.push('/')
+      this.$router.push('/bookedticket')
       ElNotification.info({
         title: 'info',
         message: response.message ? response.message : 'there was an error',
