@@ -66,7 +66,7 @@ export default{
       this.loading = false
     }else{
       this.loading = false
-      this.$router.push('/bookedticket')
+      this.$router.push('/')
       ElNotification.info({
         title: 'info',
         message: response.message ? response.message : 'there was an error',
@@ -105,7 +105,7 @@ export default{
       await useAuthStore().submitSeat(this.movie_id,this.selectedSeat).then(response=>{
         if(response.success){
           this.loading = false
-          this.$router.push('/')
+          this.$router.push('/bookedticket')
           ElNotification.success({
             title:'success',
             message:response.message
