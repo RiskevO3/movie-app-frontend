@@ -135,7 +135,7 @@
               title: 'Success',
               message: 'Register Success',
             })
-            this.$router.push('/login')
+            this.$router.push('/')
           }
           else{
             this.loading.close()
