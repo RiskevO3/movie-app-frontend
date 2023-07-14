@@ -99,6 +99,7 @@ export default {
           message: 'Username atau Password tidak boleh kosong',
           timeout: false
         })
+        this.loading.close()
         return
       }
       let res = await useAuthStore().loginRequest(this.username, this.password)

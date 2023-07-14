@@ -116,6 +116,7 @@
             title: 'info',
             message: 'Please fill all the form',
           })
+          this.loading.close()
         }
         if(this.password != this.retypepassword){
           this.password = this.retypepassword = this.retypepassword = ''
@@ -124,6 +125,7 @@
             title: 'info',
             message: 'Password and Retype Password must be same',
           })
+          this.loading.close()
         }
         else{
           let response = await useAuthStore().registerRequest(this.username,this.password)
