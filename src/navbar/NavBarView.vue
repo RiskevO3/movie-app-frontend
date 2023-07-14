@@ -64,7 +64,6 @@
       </div>
     </div>
     <div class="navbar-center">
-      <RouterLink to="/" class="btn btn-ghost normal-case text-xl">SEA</RouterLink>
     </div>
     <div class="navbar-end">
       <template v-if="useAuthStore().authToken">
