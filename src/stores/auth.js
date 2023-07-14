@@ -223,6 +223,8 @@ export const useAuthStore = defineStore('auth', {
           Authorization:`Bearer ${this.authToken}`
         }})
         if (response.data.success){
+          this.balance = response.data.balance
+          localStorage.setItem('balance', this.balance)
           return {message:'Tiket berhasil di refund!',success:true}
         }
         return {message:response.data.message?response.data.message:'something went wrong',success:false}

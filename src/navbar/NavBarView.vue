@@ -83,7 +83,7 @@
         >
           <div class="indicator">
             <i class="fa-solid fa-database text-error"></i>
-            <p class="pl-1 font-semibold">Rp. {{ getBalance.toLocaleString('id-ID') }}</p>
+            <p class="pl-1 font-semibold">Rp. {{ getBalance.toLocaleString('id-ID')  }}</p>
           </div>
         </div>
           </label>
