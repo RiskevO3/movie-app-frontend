@@ -7,6 +7,8 @@ import LoginView from '../views/LoginView.vue'
 import RegisterView from '../views/RegisterView.vue'
 import VideoView from '../views/VideoView.vue'
 import WishListView from '../views/WishListView.vue'
+import ViewSeatView from '../views/SeatView.vue'
+import TicketBookView from '../views/TicketBookView.vue'
 import { ElNotification } from 'element-plus'
 import { useAuthStore } from '../stores/auth'
 
@@ -72,6 +74,16 @@ const routes = [
     path: '/wishlist',
     name: 'wishlist',
     component: WishListView
+  },
+  {
+    path:'/seatview/:id',
+    name:'seatview',
+    component: ViewSeatView
+  },
+  {
+    path:'/bookedticket',
+    name:'bookedticket',
+    component: TicketBookView
   }
 ]
 

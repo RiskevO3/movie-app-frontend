@@ -15,15 +15,29 @@
           <p class="md:tracking-tighter sm:tracking-tighter pt-4 font-bold text-center">{{ data.duration }} min | {{ data.genre }}</p>
           <hr class="hr-text" data-content="" />
           <p class="flex text-md px-4 my-2">
+            <span class="font-semibold sm:block sm:text-center md:text-left">Age:</span>
+            <span class="sm:block sm:text-center md:text-left font-semibold">{{ data.age_minimum }}</span>
+          </p>
+          <p class="flex text-md px-4 my-2">
+            <span class="font-semibold sm:block sm:text-center md:text-left">Price:</span>
+            <span class="sm:block sm:text-center md:text-left font-semibold"> Rp.{{ data.price}}</span>           
+          </p>
+          <p class="flex text-md px-4 my-2">
             <span class="font-semibold sm:block sm:text-center md:text-left">Director:</span>
             <span class="sm:block sm:text-center md:text-left">{{ data.director }}</span>
           </p>
-          <p class="md:block sm:block px-4 my-5 text-left">
+          <p class="md:block sm:block px-4 my-2 text-left">
             <span class="font-semibold">Sinposis:</span>{{ data.description }}
           </p>
         </div>
       </div>
       <div class="justify-end items-center w-full px-5 py-2">
+          <RouterLink
+            :to="`/seatview/${data.id}`"
+            type="button"
+            class="btn btn-outline btn-success hover:scale-90 px-4 py-2 m-2 w-full"
+            >Book A Seat
+          </RouterLink>
           <button type="button" class="btn btn-outline btn-warning hover:scale-90 px-4 py-2 m-2 w-full" v-if="!isWishlist" @click="insertWishList(data.id)">
             Add To Wishlist
           </button>
@@ -102,6 +116,7 @@ export default{
     let res = await useAuthStore().getMovieDetail(id)
     if (res.success){
       this.data = res.data
+      this.data.price = this.data.price.toLocaleString('id-ID')
       this.wishList = res.data.saved
       this.loading = false
     }

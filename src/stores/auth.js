@@ -4,6 +4,7 @@ export const useAuthStore = defineStore('auth', {
   state: () => ({
     ngrokUrl: import.meta.env.VITE_SERVER_HOST,
     username: localStorage.getItem('username') ? localStorage.getItem('username') : null,
+    balance:localStorage.getItem('balance') ? localStorage.getItem('balance') : 0,
     authToken: localStorage.getItem('authToken') ? localStorage.getItem('authToken') : null
   }),
   actions: {
@@ -15,15 +16,20 @@ export const useAuthStore = defineStore('auth', {
           })
           if (response.data.success) {
             this.username = response.data.username
+            this.balance = response.data.balance
+            localStorage.setItem('balance', this.balance)
           } else {
             localStorage.removeItem('username')
             localStorage.removeItem('authToken')
+            localStorage.removeItem('balance')
             this.authToken = null
             this.username = null
+            this.balance = null
           }
         } catch (error) {
           localStorage.removeItem('username')
           localStorage.removeItem('authToken')
+          localStorage.removeItem('balance')
           this.authToken = null
           this.username = null
         }
@@ -38,8 +44,10 @@ export const useAuthStore = defineStore('auth', {
         if (response.data.success) {
           this.authToken = response.data.data.authToken
           this.username = response.data.data.username
+          this.balance = response.data.data.balance
           localStorage.setItem('authToken', this.authToken)
           localStorage.setItem('username', this.username)
+          localStorage.setItem('balance', this.balance)
           return {message: 'Success', success: true}
         } 
         return {message: response.data.data.message, success: false}
@@ -56,8 +64,10 @@ export const useAuthStore = defineStore('auth', {
         if (response.data.success) {
           this.authToken = response.data.data.authToken
           this.username = response.data.data.username
+          this.balance = response.data.data.balance
           localStorage.setItem('authToken', this.authToken)
           localStorage.setItem('username', this.username)
+          localStorage.setItem('balance', this.balance)
           return true
         }
       } catch (error) {
@@ -74,8 +84,10 @@ export const useAuthStore = defineStore('auth', {
         if(response.data.success){
           localStorage.removeItem('username')
           localStorage.removeItem('authToken')
+          localStorage.removeItem('balance')
           this.authToken = null
           this.username = null
+          this.balance = null
           return true
         }
         return false
@@ -163,6 +175,26 @@ export const useAuthStore = defineStore('auth', {
         return { message: 'Something went wrong', success: false }
       }
     },
+    async getMovieSeat(id){
+      try {
+        if (!this.authToken) {
+          return { message: 'Please Login First', success: false }
+        }
+        let response = await axios.get(`${this.ngrokUrl}/seatlist/${id}`, {
+          headers: {
+            Authorization: `Bearer ${this.authToken}`
+          }
+        })
+        if (response.data.success) {
+          return { data: response.data.data, success: true ,movie_title:response.data.movie_title,price:response.data.price}
+        } else if (response.data.message == 'Unauthorized') {
+          return { message: 'Please Login First', success: false }
+        }
+        return { message: 'Something went wrong', success: false }
+      } catch (error) {
+        return { message: 'Something went wrong', success: false }
+      }
+    },
     async checkVideo(id) {
       try {
         if (!this.authToken) {
@@ -220,6 +252,42 @@ export const useAuthStore = defineStore('auth', {
         }
         return {message:'Something went wrong',success:false}
       } catch (error) {
+        return {message:'Something went wrong',success:false}
+      }
+    },
+    async topupBalance(amount){
+      try {
+        let response = await axios.post(`${this.ngrokUrl}/topup`,{
+          amount:amount
+        },{headers:{
+          Authorization:`Bearer ${this.authToken}`
+        }})
+        if (response.data.success) {
+          this.balance = response.data.balance
+          localStorage.setItem('balance', this.balance)
+          return {message:'Success',success:true}
+        }
+        return {message:'Something went wrong',success:false}
+      } catch (error) {
+        return {message:'Something went wrong',success:false}
+      }
+    },
+    async withdrawBalance(amount){
+      try {
+        let response = await axios.post(`${this.ngrokUrl}/withdraw`,{
+          amount:amount
+        },{headers:{
+          Authorization:`Bearer ${this.authToken}`
+        }})
+        if(response.data.success){
+          this.balance = response.data.balance
+          console.log(this.balance)
+          localStorage.setItem('balance', this.balance)
+          return {message:'Success',success:true}
+        }
+        return {message:response.data.message?response.data.message:'something went wrong',success:false}
+      } catch (error) {
+        console.log('here',error)
         return {message:'Something went wrong',success:false}
       }
     }
