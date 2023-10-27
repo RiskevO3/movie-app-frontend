@@ -1,35 +1,35 @@
-# movie-vue
 
-This template should help get you started developing with Vue 3 in Vite.
+# Movie SEA Frontend
 
-## Recommended IDE Setup
+Repository ini adalah repository Frontend untuk penugasan SEA Compfest. Isi dari repository ini adalah frontend yang dibuat dengan vue Backend untuk memvisualisasikan API Backend dari url:
+https://movie-app-api-9ne6.onrender.com .
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+## Authors
 
-## Customize configuration
+- [@RiskevO3](https://github.com/RiskevO3)
 
-See [Vite Configuration Reference](https://vitejs.dev/config/).
 
-## Project Setup
+## Installation
 
-```sh
-npm install
+```bash
+  git clone https://github.com/RiskevO3/movie-sea-frontend.git
+```
+```bash
+  cd movie-sea-frontend
+  npm Install
 ```
 
-### Compile and Hot-Reload for Development
-
-```sh
-npm run dev
+Anda dapat menjalankan perintah ini jika ingin menjalankan pada devmode:
+```bash
+  npm run dev
 ```
-
-### Compile and Minify for Production
-
-```sh
-npm run build
+Jika ingin menjalankan pada production mode, anda dapat menjalankan:
+```bash
+  npm run serve
 ```
+    
+## Environment Variables
 
-### Lint with [ESLint](https://eslint.org/)
+untuk menjalakan project ini, anda harus mensetup lokasi dari api backend dengan nama:
 
-```sh
-npm run lint
-```
+`VITE_SERVER_HOST`
